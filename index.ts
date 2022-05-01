@@ -1,5 +1,7 @@
 // DEPARTAMENTO
-
+function saludo(){
+    console.log("hola desde github");
+}
 class Departamento {
     nameDepartamento: string;
   
