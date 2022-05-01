@@ -1,57 +1,85 @@
-// crear las clases Edificio, Piso y Departamento aquí
+// DEPARTAMENTO
 
-
-class Departamento{
-    nombre: string;
-    constructor(nombre:string){
-        this.nombre = nombre
+class Departamento {
+    nameDepartamento: string;
+  
+    constructor(name: string) {
+      this.nameDepartamento = name;
     }
-    getName(){
-        return this.nombre;
+  
+    getName() {
+      return this.nameDepartamento;
     }
-}
-
-
-class Piso{
-    nombre: string;
+  }
+  
+  class Piso {
+    // Informacion compartida entre métodos para poder guardar:escribir, y que otro pida:lea.
     departamentos: Departamento[];
-    constructor(nombre: string){    
-        this.nombre = nombre;
-        this.departamentos = [];
+    namePiso: string;
+  
+    constructor(name: string) {
+      this.namePiso = name;
+      this.departamentos = [];
     }
-    pushDepartamento(departamento: Departamento){
-        this.departamentos.push(departamento);
+  
+    pushDepartamento(objDepto: Departamento) {
+      // ya estoy en el piso que quiero, con el depto que quiero.
+  
+      console.log("this", this);
+      // console.log("namePiso", this.namePiso);
+      // console.log("departamentos", this.departamentos);
+      console.log("obj depto recibido: ", objDepto);
+  
+      // console.log(this.departamentos.push(objDepto));
+      // console.log(typeof this.departamentos.push(objDepto));
+      // console.log(typeof this.departamentos, typeof this.namePiso);
+  
+      this.departamentos.push(objDepto);
+      console.log("departamentos", this.departamentos);
     }
-    getDepartamentos(){ 
-        if(this.departamentos !== undefined){
-            return this.departamentos
+  
+    getDepartamento() {
+      // Obtener listado de todos los departamentos de ese piso
+      return this.departamentos;
     }
-}
-
-
-class Edificio{
-    pisos: Piso[];
-    constructor(pisos: Piso[]){
-        this.pisos = pisos;
+  }
+  
+  class Edificio {
+    arrayPisos: Piso[];
+  
+    constructor(pisos: Piso[]) {
+      this.arrayPisos = pisos;
     }
-    addDepartamentoToPiso(nombrePiso:string, departamento:Departamento){
-    const piso = this.pisos.find(piso => piso.nombre == nombrePiso);
-        if(piso !== undefined){
-            piso.pushDepartamento(departamento)
+  
+    addDepartamentoToPiso(nombreDePiso: string, departamento: Departamento) {
+      // Del array de pisos: planta baja y primer piso, busco el piso que me pasan.
+      const objPiso = this.arrayPisos.find((objPiso) => {
+        if (objPiso.namePiso == nombreDePiso) {
+          return objPiso;
+        } else {
+          throw new Error("NO EXISTE EL PISO");
         }
+      });
+  
+      // console.log("objPiso", objPiso);
+      // console.log("obj depto pasado", departamento);
+  
+      objPiso?.pushDepartamento(departamento);
+  
+      // Si no existe el piso con ese nombre, muestra un error.
     }
-    getDepartamentosByPiso(nombrePiso:String):Departamento[]{
-        const piso = this.pisos.find((piso) => piso.nombre == nombrePiso);
-        return piso.getDepartamentos();
+  
+    getDepartamentosByPiso(nombreDePiso: string) {
+      // Devuelve todos los departamentos de ese piso en formato array de la class Departamento.
+      const objPiso = this.arrayPisos.find((objPiso) => {
+        if (objPiso.namePiso == nombreDePiso) return objPiso;
+      });
+      return objPiso?.getDepartamento();
     }
-}
-    
-    
-
-
-
-// no modificar este test
-function testClaseEdificio() {
+  }
+  
+  // no modificar este test
+  function testClaseEdificio() {
     const unPiso = new Piso("planta baja");
     const otroPiso = new Piso("primer piso");
     const unEdificio = new Edificio([unPiso, otroPiso]);
